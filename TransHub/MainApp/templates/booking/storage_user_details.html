@@ -1,0 +1,178 @@
+{% extends "base1.html" %}
+{% load static %}
+
+{% block title %}Travelix warehouse booking{% endblock %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Storage User</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Book Storage</h2>
+        <form action="{% url 'storage_user_details' %}" method="post">
+            {% csrf_token %}
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" value="{{ user.username }}" required>
+                    <div id="usernameValidation" class="invalid-feedback"></div>
+                </div>
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" value="{{ user.email }}" required>
+                    <div id="emailValidation" class="invalid-feedback"></div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                     <label for="warehouse" class="form-label">Warehouse</label>
+                    {% for warehouse in warehouses %}
+                    <input type="hidden" class="form-control" id="warehouse" name="warehouse" value="{{ warehouse.id }}"   readonly required>
+                    <input type="text" class="form-control"  value="{{ warehouse.name }}"   readonly required>
+                    {% endfor %} 
+                     {% comment %} <select class="form-select" id="warehouse" name="warehouse" required>
+                        <option selected disabled>Select Warehouse</option>
+                        <!-- Add options dynamically from database -->
+                        {% for warehouse in warehouses %}
+                            <option value="{{ warehouse.id }}">{{ warehouse.name }}</option>
+                        {% endfor %}
+                    </select>  {% endcomment %}
+                </div>
+                <div class="col-md-6">
+                    <label for="seat" class="form-label">Seat no</label>
+                    <input type="seat" class="form-control" id="seat" value="{{ request.session.seat }}" readonly required >
+                </div>
+                {% comment %} <div> <!-- In your HTML template -->
+                    <p>Selected Seats: {{ request.session.seat }}</p>
+                     </div> {% endcomment %}
+                <div class="col-md-6">
+                    <label for="warehouse_type" class="form-label">Warehouse Type</label>
+                    <select class="form-select" id="warehouse_type" name="warehouse_type" required>
+                        <option selected disabled>Select Warehouse Type</option>
+                        <!-- Add options dynamically from database -->
+                        {% for warehouse_type in warehouse_types %}
+                            <option value="{{ warehouse_type.id }}" data-rate="{{ warehouse_type.rate }}">
+                                {{ warehouse_type.get_type_display }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="product_name" class="form-label">Product Name</label>
+                    <input type="text" class="form-control" id="product_name" name="product_name" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="quantity" class="form-label">Quantity</label>
+                    <input type="number" class="form-control" id="quantity" name="quantity" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="start_date" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" id="start_date" name="start_date" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="end_date" class="form-label">End Date</label>
+                    <input type="date" class="form-control" id="end_date" name="end_date" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="rate" class="form-label">Rate</label>
+                    <input type="number" class="form-control" id="rate" name="rate">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Proceed to Pay</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
+    <script>
+        
+        $(document).ready(function() {
+            // Function to validate username
+            function validateUsername() {
+                var username = $('#username').val();
+                var regex = /^[a-zA-Z][a-zA-Z\s]{0,20}[a-zA-Z\s]*$/; // Regex to match first letter, up to twenty more letters or spaces, and then any characters
+                if (!regex.test(username)) {
+                    $('#usernameValidation').text('Username must start with a letter and contain at least one special character or number. Maximum of twenty name spaces allowed.');
+                    $('#username').addClass('is-invalid');
+                    return false;
+                } else {
+                    $('#usernameValidation').text('');
+                    $('#username').removeClass('is-invalid');
+                    return true;
+                }
+            }
+
+            // Event listener to validate username on input change
+            $('#username').on('input', function() {
+                validateUsername();
+            });
+
+            // Event listener to validate username on form submission
+            $('form').submit(function(event) {
+                if (!validateUsername()) {
+                    event.preventDefault();
+                }
+            });
+
+            // Function to validate email
+            function validateEmail() {
+                var email = $('#email').val();
+                var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex to match email format
+                if (!regex.test(email)) {
+                    $('#emailValidation').text('Please enter a valid email address.');
+                    $('#email').addClass('is-invalid');
+                    return false;
+                } else {
+                    $('#emailValidation').text('');
+                    $('#email').removeClass('is-invalid');
+                    return true;
+                }
+            }
+
+            // Event listener to validate email on input change
+            $('#email').on('input', function() {
+                validateEmail();
+            });
+
+            // Event listener to validate email on form submission
+            $('form').submit(function(event) {
+                if (!validateEmail()) {
+                    event.preventDefault();
+                }
+            });
+
+
+            // Function to calculate rate based on duration and selected warehouse type
+            function updateRateBasedOnDuration() {
+                var startDate = new Date($('#start_date').val());
+                var endDate = new Date($('#end_date').val());
+                var duration = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)); // Calculate duration in days
+                var rate = parseFloat($('#warehouse_type').find(':selected').data('rate')); // Get rate from selected warehouse type
+                var totalRate = duration * rate;
+                $('#rate').val(totalRate.toFixed(2)); // Set rate with 2 decimal places
+            }
+
+            // Event listeners to recalculate rate when inputs change
+            $('#warehouse_type').change(updateRateBasedOnDuration);
+            $('#start_date, #end_date').change(updateRateBasedOnDuration);
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

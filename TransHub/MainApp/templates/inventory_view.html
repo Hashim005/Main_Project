@@ -1,0 +1,281 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <h1>Inventory</h1>
+    <!-- Button to trigger add stock modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStockModal">
+        Add Stock
+    </button>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Brand</th>
+                <th>quantity</th>
+                <th>Cost Price</th>
+                <th>Image</th>
+                <th>Date Added</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks %}
+            <tr>
+                <td>{{ stock.id }}</td>
+                <td><a href="#" class="stock-link" data-stock-id="{{ stock.id }}" data-toggle="modal" data-target="#stockDetailsModal">{{ stock.name }}</a></td>
+                <td>{{ stock.category }}</td>
+                <td>{{ stock.brand }}</td>
+                <td>{{ stock.quantity }}</td>
+                <td>{{ stock.costPrice }}</td>
+                <td><img src="{{ stock.image.url }}" alt="{{ stock.name }}" style="max-height: 50px;"></td>
+                <td>{{ stock.dateAdded }}</td>
+                <td>
+                    <!-- Button to trigger edit stock modal -->
+                    <button type="button" class="btn btn-primary edit-stock-btn" data-toggle="modal" data-target="#editStockModal{{ stock.id }}" data-stock-id="{{ stock.id }}">
+                        Edit
+                    </button>
+                    
+                    
+                    <a href="{% url 'delete_stock' stock.id %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+        <!-- Add this modal HTML code to your page -->
+    <div class="modal fade" id="stockDetailsModal" tabindex="-1" role="dialog" aria-labelledby="stockDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="stockDetailsModalLabel">Stock Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="stockDetailsContent">
+                        <!-- Stock details will be loaded here via AJAX -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    
+
+    <!-- Add Stock Modal -->
+    <div class="modal fade" id="addStockModal" tabindex="-1" role="dialog" aria-labelledby="addStockModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="post" action="{% url 'add_stock' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addStockModalLabel">Add Stock</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Add stock form fields here -->
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select class="form-control" id="category" name="category">
+                                {% for category_value, category_name in CATEGORY %}
+                                    <option value="{{ category_value }}">{{ category_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="brand">Brand</label>
+                            <select class="form-control" id="brand" name="brand">
+                                {% for brand_value, brand_name in BRAND_CHOICES %}
+                                    <option value="{{ brand_value }}">{{ brand_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity">
+                        </div>
+                        <div class="form-group">
+                            <label for="cost_price">Cost Price</label>
+                            <input type="text" class="form-control" id="cost_price" name="costPrice">
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Image</label>
+                            <input type="file" class="form-control-file" id="image" name="image">
+                        </div>
+                        <div class="form-group">
+                            <label for="date_added">Date Added</label>
+                            <input type="date" class="form-control" id="date_added" name="dateAdded" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" id="description" name="description"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Stock</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Modal content for adding stock goes here -->
+    </div>
+    
+
+    <!-- Edit Stock Modals -->
+    {% for stock in stocks %}
+    <div class="modal fade" id="editStockModal{{ stock.id }}" tabindex="-1" role="dialog" aria-labelledby="editStockModalLabel{{ stock.id }}" aria-hidden="true">
+        <!-- Modal content for editing stock goes here -->
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="post" action="{% url 'edit_stock' stock.id %}" enctype="multipart/form-data">
+        
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editStockModalLabel">Edit Stock</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Add stock form fields here -->
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ stock.name }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select class="form-control" id="category" name="category">
+                                {% for category_value, category_name in CATEGORY %}
+                                    <option value="{{ category_value }}">{{ category_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="brand">Brand</label>
+                            <select class="form-control" id="brand" name="brand">
+                                {% for brand_value, brand_name in BRAND_CHOICES %}
+                                    <option value="{{ brand_value }}">{{ brand_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" value="{{ stock.quantity }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cost_price">Cost Price</label>
+                            <input type="text" class="form-control" id="cost_price" name="costPrice" value="{{ stock.costPrice }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Image</label>
+                            <input type="file" class="form-control-file" id="image" name="image">
+                            {% if stock.image %}
+                            <img src="{{ stock.image.url }}" alt="Current Image" style="max-height: 100px;">
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="date_added">Date Added</label>
+                            <input type="date" class="form-control" id="date_added" name="dateAdded" value="{{ stock.dateAdded }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" id="description" name="description" values="{{stock.description}}"></textarea>
+                        </div>
+        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Stock</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Include Bootstrap and jQuery JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Your custom JavaScript for handling modal interactions -->
+    <script>
+        // JavaScript code to handle modal interactions
+        $(document).ready(function(){
+            // Load add stock modal content
+            $('#addStockModal').load("{% url 'add_stock' %}");
+    
+            // Load edit stock modal content for each stock item
+            $('.edit-stock-btn').click(function(){
+                var stockId = $(this).attr('data-stock-id'); // Use attr instead of data
+                $('#editStockModal' + stockId).load("/path/to/edit_stock/" + stockId + "/");
+            });
+        });
+
+       
+   
+    </script>
+    
+    {% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Function to handle click event on stock name link
+        $('.stock-link').click(function (e) {
+            e.preventDefault(); // Prevent default link behavior
+            var stockId = $(this).data('stock-id'); // Get the stock ID from data attribute
+            // AJAX request to fetch stock details
+            $.ajax({
+                type: 'GET',
+                url: '{% url "get_stock_details" %}',
+                data: {'stock_id': stockId},
+                dataType: 'json',
+                success: function (data) {
+                    // Populate modal body with received data
+                    $('#stockDetailsContent').html(`
+                        <div class="card" style="width: 18rem;">
+                            <img class="card-img-top" src="${data.image_url}" alt="${data.name}">
+                            <div class="card-body">
+                                <h5 class="card-title">${data.name}</h5>
+                                <p class="card-text">${data.description}</p>
+                                <p class="card-text">Quantity: ${data.quantity}</p>
+                                <p class="card-text">Cost Price: ${data.cost_price}</p>
+                                <p class="card-text">Date Added: ${data.date_added}</p>
+                            </div>
+                        </div>
+                    `);
+                    $('#stockDetailsModal').modal('show'); // Show the modal
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('Failed to load stock details. Please try again.');
+                }
+            });
+        });
+    });
+</script> {% endcomment %}
+    
+</body>
+</html>

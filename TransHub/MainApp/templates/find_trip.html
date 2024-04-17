@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Form</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Select2 CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <!-- Bootstrap JS, Popper.js, and jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Select2 JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      /* Set multiple background images */
+      background-image: url('/static/MainApp/images/bus_booking3.jpg'), 
+                        url('/static/MainApp/images/bus_booking4.jpg');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+    }
+
+    nav.navbar {
+      background-color: white;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar-nav li.nav-item a.nav-link {
+      color: red !important;
+      font-weight: bold;
+      cursor: pointer; /* Change the mouse pointer */
+      transition: color 0.3s, box-shadow 0.3s; /* Add a smooth transition for color and box-shadow changes on hover */
+      box-shadow: none; /* Remove the initial box-shadow */
+      border-radius: 20px; /* Set border-radius for oval shape */
+      padding: 10px 20px; /* Adjust padding for the oval shape */
+    }
+
+    .navbar-nav li.nav-item a.nav-link:hover {
+      color: darkred; /* Change the color on hover */
+      background-color: skyblue; /* Set hover background color to sky blue */
+    }
+
+    .search_panel {
+      margin-top: 70px; /* Adjust the margin to make space for the fixed navbar */
+      width: 80%;
+    }
+
+    .search_item {
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column; /* Display children (label and input/select) in a column */
+    }
+
+    /* Custom CSS for Select2 */
+    .select2-container--bootstrap4 .select2-selection--single {
+      background-color: white;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
+      height: calc(2.25rem + 2px);
+      padding: 0.375rem 0.75rem;
+      width: 100%; /* Set the width to 100% or adjust as needed */
+      min-width: 200px; /* Set a minimum width if needed */
+    }
+
+    /* Adjust the width of the container to make the dropdown wider */
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow {
+      height: calc(2.25rem + 2px);
+    }
+
+    /* Hide error messages initially */
+    .form-text.text-danger {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="#">Travelix</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contact Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Cancellation</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url "submit_feedback" %}" id="feedback">Complaint</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">My Account</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Status Check</a>
+        </li>
+      </ul>
+    </div>
+</nav>
+<div class="container search_panel">
+  <form action="{% url 'find_trip' %}" method="GET" id="search_form_2" class="search_panel_content d-flex flex-wrap justify-content-between align-items-center">
+    {% csrf_token %}
+    <div class="search_item">
+      <label for="depart">Depart</label>
+      <select name="depart" id="depart" class="form-select select2 rounded-0">
+        <option selected></option>
+        {% for location in locations %}
+          <option value="{{ location.id }}">{{ location }}</option>
+        {% endfor %}
+      </select>
+      <span id="departError" class="form-text text-danger">Please select a location</span>
+    </div>
+    <div class="search_item">
+      <label for="destination">Destination</label>
+      <select name="destination" id="destination" class="form-select select2 rounded-0">
+        <option selected></option>
+        {% for location in locations %}
+          <option value="{{ location.id }}">{{ location }}</option>
+        {% endfor %}
+      </select>
+      <span id="destinationError" class="form-text text-danger">Please select a location</span>
+    </div>
+    <div class="search_item">
+      <label for="journeyDate">Journey Date</label>
+      <input type="date" id="journeyDate" name="journeyDate" class="check_in search_input form-control" min="{{ today }}" required="required">
+      <span id="journeyDateHelp" class="form-text text-danger">Invalid journey date</span>
+    </div>
+    <div class="search_item">
+      <label for="returnDate">Return Date (optional)</label>
+      <input type="date" id="returnDate" name="returnDate" class="check_out search_input form-control" min="{{ today }}">
+      <span id="returnDateHelp" class="form-text text-danger">Invalid return date</span>
+    </div>
+
+    <!-- Hidden input field to store journey date -->
+    <input type="hidden" name="journeyDate" id="journeyDateInput">
+
+    <button type="submit" class="btn btn-primary search_button">Search</button>
+  </form>
+</div>
+
+<script>
+  $(document).ready(function() {
+    // Initialize Select2 for the "Depart" and "Destination" fields
+    $('#depart, #destination').select2({
+      placeholder: 'Select location',
+      allowClear: true,
+      theme: 'bootstrap4',
+    });
+
+    // Submit the form when the user clicks the "Search" button
+    $('#search_form_2').submit(function(e) {
+      e.preventDefault(); // Prevent default form submission
+
+      // Get the selected journey date
+      const journeyDate = $('#journeyDate').val();
+
+      // Set the value of the hidden input field for journey date
+      $('#journeyDateInput').val(journeyDate);
+
+      // Submit the form
+      this.submit();
+    });
+  });
+</script>
+
+</body>
+</html>

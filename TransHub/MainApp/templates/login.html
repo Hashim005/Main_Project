@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS for Page Styling -->
+    <style>
+        .body {
+            background-image: url({% static 'MainApp/images/login.jpg' %});
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 100px;
+        }
+    </style>   
+</head>
+<body>
+    <div class="container login-container">
+        <h2 class="text-center">Login</h2>
+        <form  method="post">
+            {% csrf_token %}
+            <!-- Email Field -->
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required >
+                
+            </div>
+            <!-- Password Field -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required onkeyup="validatePassword()">
+                <span id="password-error" class="text-danger"></span>
+            </div>
+            <!-- New Password Field (For Forgot Password) -->
+            <!-- Forgot Password Link -->
+            <p class="text-right"><a href="{% url 'password_reset'%}" id="forgotPasswordLink">Forgot Password?</a></p>
+            <!-- Submit Button -->
+            <p>{{Error_message}}</p>
+            <button type="submit" class="btn btn-primary btn-block" id="login-btn">Login</button>
+        </form>
+    </div>
+
+</body>
+</html>

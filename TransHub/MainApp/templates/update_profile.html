@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Profile</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Add your custom CSS file if needed -->
+    <link rel="stylesheet" href="custom.css">
+    <style>
+        /* Custom CSS for form styling */
+        .custom-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <center><h1 class="my-4">Update Your Profile</h1></center>
+        <form method="post" enctype="multipart/form-data" class="custom-form" onsubmit="return validateForm()">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="id_phone_number">Phone number:</label>
+                <input type="text" class="form-control" name="phone_number" value="{{ user.phone_number }}" maxlength="15" id="id_phone_number" oninput="validatePhoneNumber(this)">
+                <small class="form-text text-danger" id="phone_error"></small>
+            </div>
+
+            <div class="form-group">
+                <label for="id_age">Age:</label>
+                <input type="number" class="form-control" name="age" value="{{ user_profile.age }}" min="0" id="id_age" oninput="validateAge(this)">
+                <small class="form-text text-danger" id="age_error"></small>
+            </div>
+
+            <div class="form-group">
+                <label for="id_gender">Gender:</label>
+                <select class="form-control" name="gender" id="id_gender">
+                    <option value="male" {% if user_profile.gender == 'male' %}selected{% endif %}>Male</option>
+                    <option value="female" {% if user_profile.gender == 'female' %}selected{% endif %}>Female</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="id_city">City:</label>
+                <input type="text" class="form-control" name="city" value="{{ user_profile.city }}" maxlength="100" id="id_city" oninput="validateCity(this)">
+                <small class="form-text text-danger" id="city_error"></small>
+            </div>
+
+            <div class="form-group">
+                <label for="id_date_of_birth">Date of birth:</label>
+                <input type="text" class="form-control" name="date_of_birth" value="{{ user_profile.date_of_birth }}" id="id_date_of_birth" oninput="validateDateOfBirth(this)">
+                <small class="form-text text-danger" id="dob_error"></small>
+            </div>
+            <!-- ... (your existing HTML code) ... -->
+
+<div class="form-group">
+    <label for="id_profile_picture">Profile picture:</label>
+    Currently: <a href="{{ user_profile.profile_picture.url }}" target="_blank">{{ user_profile.profile_picture.name }}</a>
+    <input type="checkbox" name="profile_picture-clear" id="profile_picture-clear_id">
+    <label for="profile_picture-clear_id">Clear</label><br>
+    Change:
+    <input type="file" class="form-control-file" name="profile_picture" accept="image/*" id="id_profile_picture">
+</div>
+
+<!-- ... (your existing HTML code) ... -->
+
+
+            {% comment %} <div class="form-group">
+                <label for="id_profile_picture">Profile picture:</label>
+                Currently: <a href="{{ user_profile.profile_picture.url }}" target="_blank">{{ user_profile.profile_picture.name }}</a>
+                <input type="checkbox" name="profile_picture-clear" id="profile_picture-clear_id">
+                <label for="profile_picture-clear_id">Clear</label><br>
+                Change:
+                <input type="file" class="form-control-file" name="profile_picture" accept="image/*" id="id_profile_picture">
+            </div> {% endcomment %}
+
+            <button type="submit" class="btn btn-primary" id="update_btn">Update</button>
+        </form>
+    </div>
+
+    <!-- Add Bootstrap JS and jQuery scripts at the end of the body if needed -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function validatePhoneNumber(input) {
+            var phone = input.value;
+            var phoneError = document.getElementById("phone_error");
+            var phonePattern = /^\+91\d{10}$/; // Phone number format: +91 followed by 10 digits
+
+            if (!phonePattern.test(phone)) {
+                phoneError.textContent = "Phone number should start with +91 and contain 10 digits.";
+                allCorrect = 0;
+                return false;
+            } else {
+                phoneError.textContent = "";
+                allCorrect = 1;
+                return true;
+            }
+        }
+
+        {% comment %} function validatePhoneNumber(input) {
+            // Validation logic for phone number
+            var phone = input.value;
+            var phonePattern = /^\+91\d{12}$/;
+            var errorElement = document.getElementById("phone_error");
+
+            if (!phonePattern.test(phone)) {
+                errorElement.innerHTML = "Invalid phone number format.";
+            } else {
+                errorElement.innerHTML = "";
+            }
+        } {% endcomment %}
+
+        function validateAge(input) {
+            // Validation logic for age
+            var age = input.value;
+            var errorElement = document.getElementById("age_error");
+
+            if (isNaN(age) || age < 0) {
+                errorElement.innerHTML = "Age must be a positive number.";
+            } else {
+                errorElement.innerHTML = "";
+            }
+        }
+
+        function validateCity(input) {
+            // Validation logic for city
+            var city = input.value;
+            var errorElement = document.getElementById("city_error");
+
+            if (city.length < 2) {
+                errorElement.innerHTML = "City name is too short.";
+            } else {
+                errorElement.innerHTML = "";
+            }
+        }
+
+        function validateDateOfBirth(input) {
+            // Validation logic for date of birth
+            var dob = input.value;
+            var datePattern = /^\d{4}-\d{2}-\d{2}$/;
+            var errorElement = document.getElementById("dob_error");
+
+            if (!datePattern.test(dob)) {
+                errorElement.innerHTML = "Invalid date format (YYYY-MM-DD).";
+            } else {
+                errorElement.innerHTML = "";
+            }
+        }
+
+        function validateForm() {
+            // Additional validation logic for the entire form, if needed
+            // Return true if the form is valid, or false if there are validation errors
+            // Example: You can check if all error elements are empty
+            return document.getElementById("phone_error").innerHTML === "" &&
+                   document.getElementById("age_error").innerHTML === "" &&
+                   document.getElementById("city_error").innerHTML === "" &&
+                   document.getElementById("dob_error").innerHTML === "";
+        }
+    </script>
+</body>
+</html>

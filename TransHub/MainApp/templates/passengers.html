@@ -1,0 +1,250 @@
+{% load static %}
+
+<!doctype html>
+<html>
+
+<head>
+    <title>Simple Bus Seat Reservation Site</title>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.seat-charts.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="js/jquery.seat-charts.js"></script>
+
+	<script src="{% static 'js/jquery.seat-charts.js' %}"></script>
+	{% comment %} <script src="{% static 'js/script.js' %}"></script> {% endcomment %}
+
+    <style>
+        .btn-custom {
+            background-color: skyblue; /* Sky Blue */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+          }
+          
+          .btn-custom:hover {
+            background-color: #87ceeb; /* Darker Sky Blue */
+          }
+          /* Custom CSS for improved label clarity */
+        .form-section label {
+            font-weight: bold; /* Make labels bold */
+            color: #333; /* Darken label color for better contrast */
+        }
+        
+        /* Custom CSS for improved label clarity and reduced spacing */
+        .form-section label {
+            font-weight: bold; /* Make labels bold */
+            color: #333; /* Darken label color for better contrast */
+            font-size: 0.9rem; /* Reduce font size for labels */
+            margin-bottom: 5px; /* Reduce margin bottom for labels */
+        }
+        
+        .form-section input[type="text"],
+        .form-section input[type="number"],
+        .form-section input[type="email"],
+        .form-section input[type="tel"],
+        .form-section input[type="seat"],
+        .form-section select {
+            border: 1px solid #ccc; /* Add border to input fields for separation */
+            border-radius: 3px; /* Add border radius for a softer look */
+            padding: 8px; /* Add padding to input fields for better spacing */
+            margin-top: 3px; /* Reduce margin top for input fields */
+            font-size: 0.9rem; /* Reduce font size for input fields */
+        }
+        
+        /* Style for the Submit button */
+        #submitBook {
+            border-radius: 5px;
+            font-size: 1rem;
+            padding: 8px 20px;
+            background-color: #007bff; /* Change button background color */
+            color: #fff; /* Change button text color to white */
+            border: none; /* Remove button border */
+        }
+        
+        /* Change button background color on hover */
+        #submitBook:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Adjust width of form sections */
+        .form-section {
+            max-width: 350px; /* Reduce max width of form sections */
+            margin: auto;
+            background-color: #f9f9f9; /* Add background color for better contrast */
+            padding: 15px; /* Add padding for spacing */
+            border-radius: 5px; /* Add border radius for a softer look */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+        }
+        {% comment %} .form-section label {
+            font-weight: bold; /* Make labels bold */
+            color: #333; /* Darken label color for better contrast */
+        } {% endcomment %}
+        
+        /* Custom CSS for improved label clarity and reduced spacing */
+        .form-section label {
+            font-weight: bold; /* Make labels bold */
+            color: #333; /* Darken label color for better contrast */
+            font-size: 0.9rem; /* Reduce font size for labels */
+            margin-bottom: 5px; /* Reduce margin bottom for labels */
+        }
+        
+        /* Adjust layout for gender input fields */
+        .gender-label {
+            display: inline-block; /* Display label inline */
+            width: 100px; /* Adjust label width as needed */
+            margin-bottom: 0; /* Remove bottom margin for label */
+        }
+        
+        .gender-inputs {
+            display: inline-block; /* Display gender inputs inline */
+            margin-left: 10px; /* Add left margin between label and inputs */
+        }
+        
+       
+        
+        
+
+    </style>
+</head>
+        
+<body>
+        
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">Travelix Booking</h2>
+                        <button id="submitBook" class="btn btn-primary btn-block">Passenger Details</button>
+                            {% for bookedUser in seatMap %}
+                            <div class="form-section border p-3 mb-3">
+                                <h3 class="mb-3">Passenger {{ forloop.counter }}</h3>
+                                <div class="form-group">
+                                    <label for="seatNumber">Seat Number: {{ bookedUser.seat_number }}</label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Name:</label>
+                                    <input type="text" id="name" name="name{{bookedUser.seat_number}}" class="form-control" required>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="age">Age:</label>
+                                        <input type="number" id="age" name="age{{bookedUser.seat_number}}" class="form-control" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="gender" class="gender-label">Gender:</label>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender{{bookedUser.seat_number}}" id="male" value="male" required>
+                                            <label class="form-check-label" for="male">Male</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender{{bookedUser.seat_number}}" id="female" value="female" required>
+                                            <label class="form-check-label" for="female">Female</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="email" id="email" name="email{{bookedUser.seat_number}}" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number:</label>
+                                    <input type="tel" id="phone" name="phone{{bookedUser.seat_number}}" class="form-control" required>
+                                </div>
+                            </div>
+                            
+                            <div id="passengerDetails"></div><br><br>
+                            {% endfor %}
+                            <!-- Hidden input field for total price -->
+                            <input type="hidden" id="totalPrice" name="totalPrice">
+
+                            <form action="{% url 'passengers' %}" method="POST">
+                                <script
+                                    src="https://checkout.razorpay.com/v1/checkout.js"
+                                    data-key="rzp_test_xu07alXWd7WWYY" 
+                                    data-amount="29935" 
+                                    data-currency="INR"
+                                    data-order_id="{{ order_id }}"
+                                    data-buttontext="Pay with Razorpay"
+                                    data-name="Acme Corp"
+                                    data-description="A Wild Sheep Chase is the third novel by Japanese author Haruki Murakami"
+                                    data-image="https://example.com/your_logo.jpg"
+                                    data-prefill.name="Gaurav Kumar"
+                                    data-prefill.email="gaurav.kumar@example.com"
+                                    data-theme.color="#F37254"
+                                ></script>
+                                <input type="hidden" custom="Hidden Element" name="hidden"/>
+                                {% for bookedUser in seatMap %}
+                                <input type="hidden" id="hiddenName" name="name{{bookedUser.seatNumber}}">
+                                <input type="hidden" name="age{{bookedUser.seat_number}}">
+                                <input type="hidden" name="gender{{bookedUser.seat_number}}">
+                                <input type="hidden" name="email{{bookedUser.seat_number}}">
+                                <input type="hidden" name="phone{{bookedUser.seat_number}}">
+                                {% endfor %}
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
+	
+
+    <script>
+        document.getElementById('submitBook').addEventListener('click', function() {
+            document.getElementById('bookingForm').classList.remove('hidden');
+        });
+
+        document.getElementById('numSeats').addEventListener('change', function() {
+            var numSeats = parseInt(this.value);
+            addPassengerDetails(numSeats);
+        });
+    </script>
+
+    <script src="./js/script.js"></script>
+    <script>
+        // Function to get values from input fields and set them as values for hidden input fields
+        function populateHiddenInputs() {
+            // Get all input fields with IDs containing seat numbers
+            var inputFields = document.querySelectorAll('[id^="name"], [id^="age"], [id^="gender"], [id^="email"], [id^="phone"]');
+            
+            // Loop through each input field
+            inputFields.forEach(function(inputField) {
+                // Get the seat number from the input field's ID
+                var seatNumber = inputField.id.match(/\d+/)[0];
+                
+                // Get the corresponding hidden input field by seat number
+                var hiddenInput = document.querySelector('[name="name' + seatNumber + '"]');
+                
+                // If a hidden input field with the corresponding name exists
+                if (hiddenInput) {
+                    // Set the value of the hidden input field to the value of the input field
+                    hiddenInput.value = inputField.value;
+                }
+            });
+        }
+    
+        // Call the populateHiddenInputs function when the form is submitted
+        document.querySelector('form').addEventListener('submit', populateHiddenInputs);
+    </script>
+
+</body>
+
+</html>

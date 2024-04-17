@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Request Accepting Page</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Request Accepting Page</h2>
+    
+        <div class="row">
+            {% for supplier in suppliers %}
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ supplier.name }}</h5>
+                        <p class="card-text">Phone: {{ supplier.phone }}</p>
+                        <p class="card-text">Address: {{ supplier.address }}</p>
+                        <p class="card-text">Email: {{ supplier.email }}</p>
+                        <p class="card-text">GSTIN: {{ supplier.gstin }}</p>
+                        <!-- Buttons container -->
+                        <div class="d-flex justify-content-start">
+                            <form action="{% url 'accept_supplier' %}" method="post" class="mr-2">
+                                {% csrf_token %}
+                                <input type="hidden" name="supplier_id" value="{{ supplier.id }}">
+                                <button type="submit" class="btn btn-success">Accept</button>
+                            </form>
+                            <form action="{% url 'reject_supplier' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="supplier_id" value="{{ supplier.id }}">
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

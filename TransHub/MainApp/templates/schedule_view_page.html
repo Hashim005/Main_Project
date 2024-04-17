@@ -1,0 +1,103 @@
+{% load static %}{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schedule View Page</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Add any additional styles as needed -->
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+  
+    .container {
+      margin-top: 30px;
+    }
+  
+    h2 {
+      color: #007bff;
+    }
+  
+    table {
+      width: 100%;
+      margin-bottom: 1rem;
+      color: #212529;
+      border-collapse: collapse;
+    }
+  
+    th,
+    td {
+      padding: 0.75rem;
+      vertical-align: top;
+      border: 1px solid #dee2e6;
+    }
+  
+    th {
+      background-color: #007bff;
+      color: #fff;
+    }
+  
+    tbody tr:hover {
+      background-color: #f5f5f5;
+      cursor: pointer;
+    }
+  
+    .bus-number {
+      font-weight: bold;
+    }
+  
+    .category {
+      font-size: 0.8rem;
+      color: #6c757d;
+    }
+  
+    .no-schedules {
+      color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  {% if schedules %}
+    <h2>Search Results</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Schedule Time</th>
+          <th>Bus</th>
+          <th>Route (From - To)</th>
+          <th>Price</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for schedule in schedules %}
+          <tr>
+            <td>{{ schedule.schedule|date:"Y-m-d h:i A" }}</td>
+            <td>
+              <div class="bus-number">{{ schedule.bus.bus_number }}</div>
+              <div class="category">{{ schedule.bus.category }}</div>
+            </td>
+            <td>{{ schedule.depart }} - {{ schedule.destination }}</td>
+            <td>{{ schedule.fare|intcomma }}</td>
+            <td>
+              <a type="button" class="btn btn-primary" href="{% url 'seat_reservation' schedule.code schedule.id %}">Book Now</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="no-schedules">No schedules found.</p>
+  {% endif %}
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Add any additional scripts as needed -->
+</body>
+</html>

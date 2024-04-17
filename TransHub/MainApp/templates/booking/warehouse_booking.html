@@ -1,0 +1,318 @@
+{% extends "base1.html" %}
+{% load static %}
+
+{% block title %}Travelix warehouse booking{% endblock %}
+
+{% block content %}
+<!-- Your page-specific content goes here -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Seat Reservation</title>
+    <!-- Google Fonts and Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Round|Material+Icons+Sharp|Material+Icons+Two+Tone" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            width: 100%;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .bus-layout {
+            width: 100%;
+            /* Adjusted width */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+
+        .bus-seats {
+            width: 20%;
+            /* Adjusted width */
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            /* 4 columns */
+            grid-template-rows: repeat(10, 1fr);
+            /* 10 rows */
+            gap: 5px;
+            /* Reduced gap between columns */
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .seat {
+            width: 30px;
+            /* Adjusted width */
+            height: 30px;
+            /* Adjusted height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            /* Adjusted border radius */
+            font-family: 'Poppins', sans-serif;
+            font-size: 10px;
+            /* Adjusted font size */
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .seat.available {
+            background-color: #b2ff59;
+        }
+
+        .seat.booked {
+            background-color: #ff5722;
+            color: #fff;
+        }
+
+        .seat.selected {
+            background-color: #3f51b5;
+            /* Change color to dark blue for selected seats */
+            color: #fff;
+            /* Set text color to white for better visibility */
+        }
+
+        .steering {
+            width: 30px;
+            /* Adjusted width */
+            height: 30px;
+            /* Adjusted height */
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            /* Adjusted border radius */
+            background-color: #d32f2f;
+            margin: 2px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* Change to space-between for better distribution */
+            margin-top: 20px;
+            max-width: 200px;
+            /* Set a maximum width to limit the horizontal space */
+            margin-left: left;
+            /* Move the status to the right */
+            margin-right: right;
+            /* Move the status to the right */
+        }
+
+        .item {
+            font-size: 12px;
+            position: relative;
+            margin: 0 5px;
+            /* Adjust margin for spacing */
+        }
+
+        .item::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: -12px;
+            transform: translate(0, -50%);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            /* Make the dot round */
+        }
+
+        .item:nth-child(1)::before {
+            background: #b2ff59;
+            /* Green for available */
+        }
+
+        .item:nth-child(2)::before {
+            background: #ff5722;
+            /* Red for booked */
+        }
+
+        .item:nth-child(3)::before {
+            background: #3f51b5;
+            /* Blue for selected */
+        }
+
+        .women-seat {
+            background-color: #ffcccb;
+            /* Rose color for women's seats */
+        }
+
+        .btn-sm {
+            min-width: unset;
+            /* Remove the minimum width */
+            width: auto;
+            /* Set width to auto */
+            padding: 0.25rem 0.5rem;
+            /* Adjust padding as needed */
+        }
+
+        nav.navbar {
+            background-color: white;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-nav li.nav-item a.nav-link {
+            color: red !important;
+            font-weight: bold;
+            cursor: pointer;
+            /* Change the mouse pointer */
+            transition: color 0.3s, box-shadow 0.3s;
+            /* Add a smooth transition for color and box-shadow changes on hover */
+            box-shadow: none;
+            /* Remove the initial box-shadow */
+            border-radius: 20px;
+            /* Set border-radius for oval shape */
+            padding: 10px 20px;
+            /* Adjust padding for the oval shape */
+        }
+
+        .navbar-nav li.nav-item a.nav-link:hover {
+            color: darkred;
+            /* Change the color on hover */
+            background-color: skyblue;
+            /* Set hover background color to sky blue */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="status">
+        <div class="item">Available</div>
+        <div class="item">Booked</div>
+        <div class="item">Selected</div>
+    </div>
+    <div class="bus-layout">
+        <div class="bus-seats">
+            <!-- Front Part of the Bus -->
+            <!-- Seats -->
+            <div></div>
+            <div></div>
+            <div class="front">Ware</div>
+            <div></div>
+            <div class="seat available">S1</div>
+            <div class="seat available">S2</div>
+            <div class="seat booked">S3</div>
+            <div class="seat available">S4</div>
+            <div class="seat available">S5</div>
+            <div class="seat available">S6</div>
+            <div class="seat available">S7</div>
+            <div class="seat available">S8</div>
+            <div class="seat available">S9</div>
+            <div class="seat available">S10</div>
+            <div class="seat available">M1</div>
+            <div class="seat available">M2</div>
+            <div class="seat available">M3</div>
+            <div class="seat available">M4</div>
+            <div class="seat available">M5</div>
+            <div class="seat available">M6</div>
+            <div class="seat available">L1</div>
+            <div class="seat available">L2</div>
+            <div class="seat available">L3</div>
+            <div class="seat available">L4</div>
+        </div>
+        <div class="container mt-5">
+            <div class="container mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card shadow">
+                            <div class="card-header bg-primary text-white">
+                                <h3>Storage Selection</h3>
+                            </div>
+                            <form action="{% url 'warehouse_booking' %}" method="post">
+                                {% csrf_token %}
+                                <div class="d-flex align-items-center mb-3">
+                                    <p class="mr-2">Selected storage:</p>
+                                    <p id="selectedSeatsDisplay"></p>
+                                    <input type="hidden" name="data_list" id="data_list_input">
+                                    <input type="hidden" name="selected_seats_display" id="selectedSeatsDisplayInput">
+                                    <input type="hidden" name="warehouse_type" value="{{ warehouse_type.id }}">
+                                </div>
+                                <button type="submit" id="continueBtn" class="btn btn-primary btn-sm">Book</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+        const seats = document.querySelectorAll('.seat');
+        const selectedSeatNumbers = []; // Array to store selected seat numbers
+
+        seats.forEach(seat => {
+            seat.addEventListener('mouseenter', () => {
+                if (!seat.classList.contains('booked') && !seat.classList.contains('selected')) {
+                    seat.style.backgroundColor = '#fff'; /* Change color to white */
+                }
+            });
+
+            seat.addEventListener('mouseleave', () => {
+                if (!seat.classList.contains('booked') && !seat.classList.contains('selected')) {
+                    seat.style.backgroundColor = '#b2ff59'; /* Restore original color for available seats */
+                }
+            });
+
+            seat.addEventListener('click', () => {
+                if (seat.classList.contains('booked')) {
+                    alert('This seat is already booked.');
+                } else {
+                    seat.classList.toggle('selected');
+                    const seatNumber = seat.textContent;
+
+                    // Toggle seat number in selectedSeatNumbers array
+                    const index = selectedSeatNumbers.indexOf(seatNumber);
+                    if (index === -1) {
+                        selectedSeatNumbers.push(seatNumber); // Add seat number if not present
+                    } else {
+                        selectedSeatNumbers.splice(index, 1); // Remove seat number if present
+                    }
+
+                    // Update UI to show selected seat numbers
+                    const selectedSeatsDisplay = document.getElementById('selectedSeatsDisplay');
+                    selectedSeatsDisplay.textContent = selectedSeatNumbers.join('  ');
+
+                    // Change background color of selected seat
+                    if (seat.classList.contains('selected')) {
+                        seat.style.backgroundColor = '#3f51b5'; /* Change color to dark blue for selected seats */
+                        seat.style.color = '#fff'; /* Set text color to white for better visibility */
+                    } else {
+                        seat.style.backgroundColor = '#b2ff59'; /* Restore original color for available seats */
+                        seat.style.color = ''; /* Restore original text color */
+                    }
+
+                    // Uncomment the next line if you want to see selected seat numbers in console
+                    // console.log(selectedSeatNumbers);
+                    document.getElementById('data_list_input').value = JSON.stringify(selectedSeatNumbers);
+                    document.getElementById('selectedSeatsDisplayInput').value = selectedSeatsDisplay.textContent;
+                }
+            });
+        });
+    </script>
+    <!-- Add a button to trigger the function to print the number of selected seats -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
+{% endblock %}

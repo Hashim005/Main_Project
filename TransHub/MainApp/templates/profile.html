@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light gray background */
+        }
+        .profile-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff; /* White background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .profile-image {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        .profile-info {
+            text-align: left;
+            font-size: 18px;
+            color: #333; /* Dark text color */
+        }
+        .profile-info strong {
+            font-weight: bold;
+        }
+        h1 {
+            text-align: center;
+            color: #333; /* Dark text color */
+        }
+    </style>
+</head>
+<body>
+    <div class="container profile-container">
+        <h1>User Profile</h1>
+        <div class="text-center">
+            {% if request.user.userprofile.profile_picture %}
+                <img src="{{ request.user.userprofile.profile_picture.url }}" alt="Profile Picture" class="profile-image img-fluid">
+            {% else %}
+                <p>No profile picture uploaded.</p>
+            {% endif %}
+        </div>
+        <div class="profile-info">
+            <p><strong>Username:</strong> {{ request.user.username }}</p>
+            <p><strong>Email:</strong> {{ request.user.email }}</p>
+            <p><strong>Phone Number:</strong> {{ request.user.phone_number }}</p>
+            <p><strong>Age:</strong> {{ request.user.userprofile.age }}</p>
+            <p><strong>Gender:</strong> {{ request.user.userprofile.gender }}</p>
+            <p><strong>City:</strong> {{ request.user.userprofile.city }}</p>
+            <p><strong>Date of Birth:</strong> {{ request.user.userprofile.date_of_birth }}</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

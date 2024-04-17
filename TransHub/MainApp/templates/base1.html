@@ -1,0 +1,234 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Warehouse &mdash; Free Website Template by Free-Template.co{% endblock %}</title>
+    <!-- Your meta tags, stylesheets, etc. -->
+    <link rel="stylesheet" href="{% static 'MainApp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'MainApp/css/style.css' %}">
+
+    <link rel="shortcut icon" href="{% static 'MainApp/images/ftco-32x32.png' %}">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,900|Oswald:300,400,700" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'MainApp/fonts/icomoon/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'MainApp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'MainApp/css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'MainApp/css/owl.carousel.min.css' %}
+    ">
+    <link rel="stylesheet" href="{% static 'MainApp/css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'MainApp/css/owl.theme.default.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'MainApp/css/jquery.fancybox.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'MainApp/css/bootstrap-datepicker.css' %}">
+
+    <link rel="stylesheet" href="{% static 'MainApp/fonts/flaticon/font/flaticon.css' %}">
+
+    <link rel="stylesheet" href="{% static 'MainApp/css/aos.css' %}">
+
+    <link rel="stylesheet" href="{% static 'MainApp/css/style.css' %}">
+    <style>
+        /* Basic styling for the header */
+        header {
+            background-color: #333; /* Dark background color */
+            color: #fff; /* White text color */
+            padding: 10px 0; /* Add padding to the top and bottom */
+        }
+        .site-logo a {
+            color: #fff; /* White text color for the logo */
+            text-decoration: none; /* Remove underline from the logo */
+        }
+        .site-menu {
+            list-style-type: none; /* Remove default bullet points */
+            margin: 0; /* Remove default margin */
+            padding: 0; /* Remove default padding */
+        }
+        .site-menu li {
+            display: inline-block; /* Display menu items inline */
+            margin-right: 20px; /* Add spacing between menu items */
+        }
+        .site-menu li:last-child {
+            margin-right: 0; /* Remove margin from the last menu item */
+        }
+        .site-menu li a {
+            color: #fff; /* White text color for menu items */
+            text-decoration: none; /* Remove underline from menu items */
+        }
+
+        .nav-container {
+            background: #f0f0f0; /* Light grey background */
+            overflow: auto; /* Clears the float */
+            padding: 10px 0; /* Some padding around the items */
+        }
+    
+        /* Styling for the login link */
+        #logout {
+            float: right; /* Position to the right */
+            font-family: 'Arial', sans-serif; /* Stylish font */
+            font-size: 16px; /* Adjust as needed */
+            color: #007bff; /* Bootstrap primary color for example */
+            text-decoration: none; /* Remove underline from links */
+            padding: 5px 15px; /* Some padding for a nicer look */
+            background-color: #ffffff; /* White background */
+            border: 1px solid #ddd; /* Light grey border */
+            border-radius: 5px; /* Rounded corners */
+            margin-left: 50px; /* Space from the right side */
+        }
+    
+        /* Add hover effect */
+        #logout:hover {
+            background-color: #007bff; /* Change background on hover */
+            color: #ffffff; /* White text on hover */
+            text-decoration: none; /* Ensure no underline appears on hover */
+        }
+    
+         /* Custom CSS for circle profile photo */
+         .profile-photo {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          overflow: hidden;
+        }
+
+        
+    </style>
+</head>
+<body>
+    
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-6 col-xl-2 site-logo">
+                    <h1 class="mb-0 m-0 p-0"><a href="index.html" class="mb-0">Warehouse</a></h1>
+                </div>
+                <div class="col-12 col-md-10 d-none d-xl-block">
+                    <nav class="site-navigation text-right" role="navigation">
+                        <ul class="site-menu">
+                            <li><a href="#home-section">Home</a></li>
+                            <li><a href="#properties-section">Properties</a></li>
+                            <li><a href="{% url "supplier_page" %}">Supplier</a></li>
+                            <li><a href="#about-section">About</a></li>
+                            <li><a href="#news-section">News</a></li>
+                            <li><a href="#contact-section">Contact</a></li>
+                            <li>
+                                <div class="container mt-4">
+                                  <div class="row">
+                                    <div class="col-12 text-end">
+                                      <!-- Profile photo with dropdown -->
+                                      <div class="dropdown">
+                                        <a class="d-block profile-photo" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                          <img src="{% static 'MainApp/images/rohith.jpg' %}" class="img-fluid" alt="Profile Photo">
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                                          <li><a class="dropdown-item" href="{% url 'warehouse_profile_page' %}">Profile</a></li>
+                                          <li><a class="dropdown-item" href="{% url 'warehoseindex' %}">Logout</a></li>
+                                          <li><a class="dropdown-item" href="#">Settings</a></li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+              
+              
+                              </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End Header Section -->
+
+    <!-- Content Section -->
+    <div class="site-wrap">
+        <div class="site-mobile-menu site-navbar-target">
+            <div class="site-mobile-menu-header">
+                <div class="site-mobile-menu-close mt-3">
+                    <span class="icon-close2 js-menu-toggle"></span>
+                </div>
+            </div>
+            <div class="site-mobile-menu-body"></div>
+        </div>
+
+        <!-- Content block -->
+        {% block content %}
+        {% endblock %}
+    </div>
+    <!-- End Content Section -->
+
+
+    <!-- Footer Section -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <h2 class="footer-heading mb-4">About Us</h2>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque facere laudantium magnam voluptatum autem. Amet aliquid nesciunt veritatis aliquam.</p>
+                        </div>
+                        <div class="col-md-3 mx-auto">
+                            <h2 class="footer-heading mb-4">Quick Links</h2>
+                            <ul class="list-unstyled">
+                                <li><a href="#">About Us</a></li>
+                                <li><a href="#">Services</a></li>
+                                <li><a href="#">Testimonials</a></li>
+                                <li><a href="#">Contact Us</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-4">
+                        <h2 class="footer-heading mb-4">Subscribe Newsletter</h2>
+                        <form action="#" method="post" class="footer-subscribe">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control border-secondary text-white bg-transparent" placeholder="Enter Email" aria-label="Enter Email" aria-describedby="button-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary text-black" type="button" id="button-addon2">Send</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="">
+                        <h2 class="footer-heading mb-4">Follow Us</h2>
+                        <a href="#" class="pl-0 pr-3"><span class="icon-facebook"></span></a>
+                        <a href="#" class="pl-3 pr-3"><span class="icon-twitter"></span></a>
+                        <a href="#" class="pl-3 pr-3"><span class="icon-instagram"></span></a>
+                        <a href="#" class="pl-3 pr-3"><span class="icon-linkedin"></span></a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </footer>
+    <!-- End Footer Section -->
+
+            <a href="#top" class="gototop"><span class="icon-angle-double-up"></span></a> 
+
+            <script src="{% static 'MainApp/js/jquery-3.3.1.min.js' %}"></script>
+            <script src="{% static 'MainApp/js/jquery-ui.js' %}"></script>
+            <script src="{% static 'MainApp/js/popper.min.js' %}"></script>
+            <script src="{% static 'MainApp/js/bootstrap.min.js' %}"></script>
+            <script src="{% static 'MainApp/js/owl.carousel.min.js' %}"></script>
+            <script src="{% static 'MainApp/js/jquery.countdown.min.js' %}"></script>
+            <script src="{% static 'MainApp/js/bootstrap-datepicker.min.js' %}"></script>
+            <script src="{% static 'MainApp/js/jquery.easing.1.3.js' %}"></script>
+            <script src="{% static 'MainApp/js/aos.js' %}"></script>
+            <script src="{% static 'MainApp/js/jquery.fancybox.min.js' %}"></script>
+            <script src="{% static 'MainApp/js/jquery.sticky.js' %}"></script>
+
+            
+            <script src="{% static 'MainApp/js/main.js' %}"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+                
+</body>
+</html>

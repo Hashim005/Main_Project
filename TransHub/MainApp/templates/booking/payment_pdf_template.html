@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travelix Warehouse1 Payment Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+        .payment-details {
+            margin-top: 20px;
+        }
+        .payment-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .payment-details th, .payment-details td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .payment-details th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Travelix Warehouse1</h1>
+        <div class="payment-details">
+            <table>
+                <tr>
+                    <th>User</th>
+                    <td>{{ payment_instance.user }}</td>
+                </tr>
+                <tr>
+                    <th>Warehouse</th>
+                    <td>{{ payment_instance.warehouse }}</td>
+                </tr>
+                <tr>
+                    <th>Warehouse Type</th>
+                    <td>{{ payment_instance.warehouse_type }}</td>
+                </tr>
+                <tr>
+                    <th>Product Name</th>
+                    <td>{{ payment_instance.product_name }}</td>
+                </tr>
+                <tr>
+                    <th>Quantity</th>
+                    <td>{{ payment_instance.quantity }}</td>
+                </tr>
+                <tr>
+                    <th>Starting Date</th>
+                    <td>{{ payment_instance.start_date }}</td>
+                </tr>
+                <tr>
+                    <th>Ending Date</th>
+                    <td>{{ payment_instance.end_date }}</td>
+                </tr>
+                <tr>
+                    <th>Total Amount</th>
+                    <td>{{ payment_instance.total_amount }}</td>
+                </tr>
+                <tr>
+                    <th>Payment</th>
+                    <td>{{ payment_instance.is_paid }}</td>
+                </tr>
+                <tr>
+                    <th>Selected Seats Display</th>
+                    <td>{{ payment_instance.selected_seats_display }}</td>
+                </tr>
+            </table>
+            <!-- Add a hidden link for automatic download -->
+            <a href="{% url 'generate_pdf' %}" id="download-pdf-link" style="display: none;"></a>
+            <center>
+                <!-- Add a button to trigger the download link click event -->
+                <button onclick="downloadPDF()">Download PDF</button>
+            </center>
+        </div>
+    </div>
+
+    <!-- Add JavaScript to trigger the download link click event -->
+    <script>
+        function downloadPDF() {
+            // Trigger the click event of the download link
+            document.getElementById('download-pdf-link').click();
+        }
+    </script>
+</body>
+</html>
